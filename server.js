@@ -5,7 +5,7 @@ var app 		= express();
 var mongoose 	= require('mongoose');
 
 // Conexión con la base de datos
-mongoose.connect('mongodb://localhost:27017/angular-todo');
+mongoose.connect('mongodb://localhost:27017/simple-desk-2');
 
 // Configuración
 app.configure(function() {
@@ -36,7 +36,7 @@ app.get('/api/todos', function(req, res) {
 });
 
 // POST que crea un TODO y devuelve todos tras la creación
-app.post('/api/todos', function(req, res) {				
+app.post('/api/projects', function(req, res) {				
 	Todo.create({
 		text: req.body.text,
 		done: false
@@ -54,8 +54,8 @@ app.post('/api/todos', function(req, res) {
 	});
 });
 
-// DELETE un TODO específico y devuelve todos tras borrarlo.
-app.delete('/api/todos/:todo', function(req, res) {		
+// DELETE un TODO específicos y devuelve todos tras borrarlo.
+app.delete('/api/projects/:todo', function(req, res) {		
 	Todo.remove({
 		_id: req.params.todo
 	}, function(err, todo) {
