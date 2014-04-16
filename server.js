@@ -1,11 +1,25 @@
 //server.js
-
 var express 	= require('express');
 var app 		= express();
 var mongoose 	= require('mongoose');
 
-// Conexión con la base de datos
-mongoose.connect('mongodb://localhost:27017/simple-desk-2');
+app.configure('development', function(){
+  app.use(express.errorHandler());
+  app.set('db-uri', 'mongodb://localhost/simple-desk-2');
+});
+
+app.configure('test', function() {
+  app.set('db-uri', 'mongodb://localhost/simple-desk-2-test');
+  app.set('view options', {
+    pretty: true
+  });
+  process.env.PORT = 8088;
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler());
+  app.set('db-uri', process.env.MONGOHQ_URL);
+});
 
 // Configuración
 app.configure(function() {
