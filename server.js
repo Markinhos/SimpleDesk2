@@ -35,13 +35,24 @@ app.configure(function() {
     app.use(express.methodOverride());					
 });
 
-
+console.log('Mongo uri' + app.get('db-uri'));
 mongoose.connect(app.get('db-uri'));
 
 // Definición de modelos
-var Project = mongoose.model('Project', {
-	text: String
+
+var TaskSchema = new mongoose.Schema({    
+    created: {type: Date, default: Date.now },
+    title: String,
+    done: {type: Boolean, default: false }
 });
+
+var Project = mongoose.model('Project', {
+	title: String,
+    description: String,
+    created: {type: Date, default: Date.now },
+    tasks: [TaskSchema]
+});
+
 
 // Rutas de nuestro API
 // GET de todos los TODOs
@@ -55,9 +66,10 @@ app.get('/api/projects', function(req, res) {
 });
 
 // POST que crea un TODO y devuelve todos tras la creación
-app.post('/api/projects', function(req, res) {				
+app.post('/api/projects', function(req, res) {		
+    console.log('Title ' + req.body.title);
 	Project.create({
-		text: req.body.text,
+		title: req.body.title,
 		done: false
 	}, function(err, todo){
 		if(err) {
@@ -89,7 +101,27 @@ app.delete('/api/projects/:project', function(req, res) {
 			res.json(todos);
 		});
 
-	})
+	});
+});
+
+
+// DELETE un TODO específicos y devuelve todos tras borrarlo.
+app.post('/api/projects/:project/tasks', function(req, res) {		
+	Project.create({
+		title: req.body.text,
+		done: false
+	}, function(err, todo){
+		if(err) {
+			res.send(err);
+		}
+
+		Project.find(function(err, todos) {
+			if(err){
+				res.send(err);
+			}
+			res.json(todos);
+		});
+	});
 });
 
 // Carga una vista HTML simple donde irá nuestra Single App Page

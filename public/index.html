@@ -22,7 +22,7 @@
 					<div class="form-group">
 						<input type="text" class="form-control input-lg text-center"
 						placeholder="Inserta un proyecto nuevo"
-						ng-model="formData.text">
+						ng-model="formData.title">
 					</div>
 					<button class="btn btn-primary btn-lg" ng-click="createProject()">Add</button>
 				</form>
@@ -35,7 +35,7 @@
 				<div class="checkbox" ng-repeat="project in projects">
 				<label>
 						<input type="checkbox" ng-click="deleteProject(project._id)">
-						{{ project.text }}
+						{{ project.title }}
 					</label>
 				</div>
 			</div>
