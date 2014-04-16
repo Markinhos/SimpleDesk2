@@ -4,25 +4,27 @@ var app 		= express();
 var mongoose 	= require('mongoose');
 
 app.configure('development', function(){
-  app.use(express.errorHandler());
-  app.set('db-uri', 'mongodb://localhost/simple-desk-2');
+    app.use(express.errorHandler());
+    app.set('db-uri', 'mongodb://localhost/simple-desk-2');
 });
 
 app.configure('test', function() {
-  app.set('db-uri', 'mongodb://localhost/simple-desk-2-test');
-  app.set('view options', {
+    app.set('db-uri', 'mongodb://localhost/simple-desk-2-test');
+    app.set('view options', {
     pretty: true
-  });
-  process.env.PORT = 8088;
+    });
+    process.env.PORT = 8088;
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler());
-  app.set('db-uri', process.env.MONGOHQ_URL);
+    app.use(express.errorHandler());
+    app.set('db-uri', process.env.MONGOHQ_URL);
 });
 
 // Configuración
 app.configure(function() {
+    
+    app.set('port', process.env.PORT || 8080);
     // Localización de los ficheros estáticos
     app.use(express.static(__dirname + '/public'));
     // Muestra un log de todos los request en la consola		
@@ -94,6 +96,6 @@ app.get('*', function(req, res) {
 });
 
 // Escucha en el puerto 8080 y corre el server
-app.listen(8080, function() {
+app.listen(app.get('port'), function() {
 	console.log('App listening on port 8080');
 });
