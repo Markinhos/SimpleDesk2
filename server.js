@@ -11,7 +11,7 @@ app.configure('development', function(){
 app.configure('test', function() {
     app.set('db-uri', 'mongodb://localhost/simple-desk-2-test');
     app.set('view options', {
-    pretty: true
+        pretty: true
     });
     process.env.PORT = 8088;
 });
@@ -35,15 +35,18 @@ app.configure(function() {
     app.use(express.methodOverride());					
 });
 
+
+mongoose.connect(app.get('db-uri'));
+
 // Definición de modelos
-var Todo = mongoose.model('Todo', {
+var Project = mongoose.model('Project', {
 	text: String
 });
 
 // Rutas de nuestro API
 // GET de todos los TODOs
-app.get('/api/todos', function(req, res) {				
-	Todo.find(function(err, todos) {
+app.get('/api/projects', function(req, res) {
+	Project.find(function(err, todos) {
 		if(err) {
 			res.send(err);
 		}
@@ -53,7 +56,7 @@ app.get('/api/todos', function(req, res) {
 
 // POST que crea un TODO y devuelve todos tras la creación
 app.post('/api/projects', function(req, res) {				
-	Todo.create({
+	Project.create({
 		text: req.body.text,
 		done: false
 	}, function(err, todo){
@@ -61,7 +64,7 @@ app.post('/api/projects', function(req, res) {
 			res.send(err);
 		}
 
-		Todo.find(function(err, todos) {
+		Project.find(function(err, todos) {
 			if(err){
 				res.send(err);
 			}
@@ -71,15 +74,15 @@ app.post('/api/projects', function(req, res) {
 });
 
 // DELETE un TODO específicos y devuelve todos tras borrarlo.
-app.delete('/api/projects/:todo', function(req, res) {		
-	Todo.remove({
-		_id: req.params.todo
+app.delete('/api/projects/:project', function(req, res) {		
+	Project.remove({
+		_id: req.params.project
 	}, function(err, todo) {
 		if(err){
 			res.send(err);
 		}
 
-		Todo.find(function(err, todos) {
+		Project.find(function(err, todos) {
 			if(err){
 				res.send(err);
 			}

@@ -4,9 +4,9 @@ function mainController($scope, $http) {
 	$scope.formData = {};
 
     // Cuando se cargue la página, pide del API todos los TODOs
-    $http.get('/api/todos')
+    $http.get('/api/projects')
     .success(function(data) {
-    	$scope.todos = data;
+    	$scope.projects = data;
     	console.log(data)
     })
     .error(function(data) {
@@ -14,11 +14,11 @@ function mainController($scope, $http) {
     });
 
     // Cuando se añade un nuevo TODO, manda el texto a la API
-    $scope.createTodo = function(){
-    	$http.post('/api/todos', $scope.formData)
+    $scope.createProject = function(){
+    	$http.post('/api/projects', $scope.formData)
     	.success(function(data) {
     		$scope.formData = {};
-    		$scope.todos = data;
+    		$scope.projects = data;
     		console.log(data);
     	})
     	.error(function(data) {
@@ -27,10 +27,10 @@ function mainController($scope, $http) {
     };
 
     // Borra un TODO despues de checkearlo como acabado
-    $scope.deleteTodo = function(id) {
-    	$http.delete('/api/todos/' + id)
+    $scope.deleteProject = function(id) {
+    	$http.delete('/api/projects/' + id)
     	.success(function(data) {
-    		$scope.todos = data;
+    		$scope.projects = data;
     		console.log(data);
     	})
     	.error(function(data) {
